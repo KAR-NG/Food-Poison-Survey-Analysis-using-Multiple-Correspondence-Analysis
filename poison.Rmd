@@ -1,0 +1,64 @@
+---
+title: "poison_survey"
+author: "Kar"
+date: '2022-05-05'
+output: 
+  github_document: 
+    toc: true
+    toc_depth: 4
+always_allow_html: yes
+---
+
+
+## SUMMARY
+
+## R PACKAGES
+
+```{r}
+library(tidyverse)
+library(skimr)
+library(factoextra)
+library(FactoMineR)
+
+```
+
+
+## INTRODUCTION
+
+This project will analyse a survey dataset using one of the principal component methods. The technique of "Principal component methods" is known as one of the machine learning methods, belonging to the "unsupervised" branch, which can quickly summarise a dataset by revealing the most important variables (columns) or observations (rows) in the dataset. 
+
+The data of this survey dataset was collected from students in a primary school who suffered from food poisoning. The dataset contains various type of information such as age, time, whether the student is sicked, sex, symptoms of food poisoning (nausea, vomiting, abdominal, fever, and diarrhea) and food they ate (potato, fish, mayo, courgette, cheese, ice cream).
+
+
+
+
+
+## DATA PREPARATION
+
+The dataset of this project is called "poison", which is a public dataset from the R package "FactoMineR".
+
+### Data import
+
+Following code download the dataset from the package.
+
+```{r}
+data(poison)
+
+```
+
+Random sampling the first 10 rows of the dataset:
+
+```{r}
+sample_n(poison, 10)
+
+```
+
+### Data Description
+
+### Data exploration
+
+## PRINCIPAL COMPONENT METHODS
+
+## REFERENCE
+
+KASSAMBARA A 2017, *Practical Guide To Principal Component Methods in R*, Edition 1, sthda.com
