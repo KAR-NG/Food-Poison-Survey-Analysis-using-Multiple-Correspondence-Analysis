@@ -3,48 +3,32 @@ poison_survey
 Kar
 2022-05-05
 
--   [SUMMARY](#summary)
--   [R PACKAGES](#r-packages)
--   [INTRODUCTION](#introduction)
--   [DATA PREPARATION](#data-preparation)
-    -   [Data Import](#data-import)
-    -   [Data Exploration](#data-exploration)
--   [EDA](#eda)
-    -   [Missing](#missing)
+-   [1 SUMMARY](#1-summary)
+-   [2 R PACKAGES](#2-r-packages)
+-   [3 INTRODUCTION](#3-introduction)
+-   [4 DATA PREPARATION](#4-data-preparation)
+    -   [4.1 Data Import](#41-data-import)
+    -   [4.2 Data Exploration](#42-data-exploration)
+-   [5 EDA](#5-eda)
+    -   [5.1 Age and Time](#51-age-and-time)
+    -   [5.2 Dashboard](#52-dashboard)
 -   [PRINCIPAL COMPONENT METHODS](#principal-component-methods)
 -   [REFERENCE](#reference)
 
-## SUMMARY
+## 1 SUMMARY
 
-## R PACKAGES
+## 2 R PACKAGES
 
 ``` r
 library(tidyverse)
-```
-
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-
-    ## v ggplot2 3.3.5     v purrr   0.3.4
-    ## v tibble  3.1.4     v dplyr   1.0.7
-    ## v tidyr   1.1.3     v stringr 1.4.0
-    ## v readr   2.0.1     v forcats 0.5.1
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 library(skimr)
+library(tidytext)
+library(cowplot)
 library(factoextra)
-```
-
-    ## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
-
-``` r
 library(FactoMineR)
 ```
 
-## INTRODUCTION
+## 3 INTRODUCTION
 
 This project will analyse a survey dataset using one of the principal
 component methods. The technique of “Principal component methods” is
@@ -60,12 +44,12 @@ sex, symptoms of food poisoning (nausea, vomiting, abdominal, fever, and
 diarrhea) and food they ate (potato, fish, mayo, courgette, cheese, ice
 cream).
 
-## DATA PREPARATION
+## 4 DATA PREPARATION
 
 The dataset of this project is called “poison”, which is a public
 dataset from the R package “FactoMineR”.
 
-### Data Import
+### 4.1 Data Import
 
 Following code download the dataset from the package.
 
@@ -80,29 +64,29 @@ sample_n(poison, 10)
 ```
 
     ##    Age Time   Sick Sex   Nausea Vomiting Abdominals   Fever   Diarrhae   Potato
-    ## 12  10   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_n Diarrhea_n Potato_y
-    ## 23   8   21 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 32   6    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 30  79   17 Sick_y   F Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 45   5   20 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 9    5   20 Sick_y   M Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 11   7   17 Sick_y   F Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 18   5   15 Sick_y   M Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 8   10    8 Sick_y   F Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 29  88    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 4    9    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 26   9    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 35   7   15 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_n
     ## 43  82   20 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 30  79   17 Sick_y   F Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 1    9   22 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 3    6   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 13  36   19 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 28  85    9 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
     ##      Fish   Mayo Courgette   Cheese   Icecream
-    ## 12 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 23 Fish_y Mayo_y   Courg_n Cheese_y Icecream_y
-    ## 32 Fish_y Mayo_n   Courg_y Cheese_n Icecream_y
-    ## 30 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 45 Fish_y Mayo_y   Courg_n Cheese_y Icecream_y
-    ## 9  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 11 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 18 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 8  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 29 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 4  Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
+    ## 26 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 35 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
     ## 43 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 30 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 1  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 3  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 13 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 28 Fish_y Mayo_n   Courg_n Cheese_y Icecream_y
 
-### Data Exploration
+### 4.2 Data Exploration
 
 The dataset has 55 rows (55 students) and 15 columns recording the
 various type of variables (also known as feature).
@@ -197,7 +181,10 @@ str(poison)
     ##  $ Cheese    : Factor w/ 2 levels "Cheese_n","Cheese_y": 2 1 2 2 2 2 2 2 2 2 ...
     ##  $ Icecream  : Factor w/ 2 levels "Icecream_n","Icecream_y": 2 2 2 2 2 2 2 2 2 2 ...
 
-Checking missing data in the dataset.
+Checking missing data in the dataset, there is no missing data deteccted
+by examining the column “n_missing” and “complete_rate” in following
+tables. This special summary also summarise that there are 13 factor
+variables and 2 numerical variables.
 
 ``` r
 skim_without_charts(poison)
@@ -242,11 +229,196 @@ Data summary
 | Age           |         0 |             1 | 16.93 | 23.78 |   4 |   6 |   8 | 10.0 |   88 |
 | Time          |         0 |             1 | 10.16 |  7.80 |   0 |   0 |  12 | 16.5 |   22 |
 
-## EDA
+Alternatively, using following code to check missing data in the
+dataset.
 
-### Missing
+``` r
+colSums(is.na(poison))
+```
+
+    ##        Age       Time       Sick        Sex     Nausea   Vomiting Abdominals 
+    ##          0          0          0          0          0          0          0 
+    ##      Fever   Diarrhae     Potato       Fish       Mayo  Courgette     Cheese 
+    ##          0          0          0          0          0          0          0 
+    ##   Icecream 
+    ##          0
+
+There is no missing data in the dataset.
+
+## 5 EDA
+
+EDA stands for Exploratory data analysis, which is using graphical
+methods to explore the data, to find and understand trends.
+
+### 5.1 Age and Time
+
+``` r
+# df
+
+df5.2 <- poison %>% 
+  dplyr::select("Age", "Time") %>% 
+  pivot_longer(c(1:2), names_to = "var", values_to = "val") %>% 
+  mutate(var = as.factor(var),
+         val = as.factor(val)) %>% 
+  group_by(var, val) %>% 
+  summarise(count = n()) %>% 
+  ungroup()
+  
+df5.2
+```
+
+    ## # A tibble: 34 x 3
+    ##    var   val   count
+    ##    <fct> <fct> <int>
+    ##  1 Age   4         1
+    ##  2 Age   5         8
+    ##  3 Age   6         7
+    ##  4 Age   7         7
+    ##  5 Age   8         6
+    ##  6 Age   9         7
+    ##  7 Age   10        6
+    ##  8 Age   11        5
+    ##  9 Age   36        1
+    ## 10 Age   45        1
+    ## # ... with 24 more rows
+
+``` r
+# graph
+
+ggplot(df5.2, aes(x = val, y = count, fill = var)) +
+  geom_bar(stat = "identity", color = "black") +
+  geom_text(aes(label = count), vjust = -0.2) +
+  facet_wrap(~var, scale = "free") +
+  theme_bw() +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5)) +
+  labs(title = "The distribution of Age and Time",
+       subtitle = "by Histogram",
+       x = "Value",
+       y = "Head Count")
+```
+
+![](poison_files/figure-gfm/unnamed-chunk-9-1.png)<!-- --> From above
+graph, I can figure that students participated in the survey were
+between 5 to 11 years old. The 4 years old child might be a visitor
+brought by one of the adults between 36 to 88 years old. These adults
+might be visitors or teachers. The identity of these adults are not
+important, as well as the variable “Time” because I am more focus on
+what food cause the food poisoning.
+
+### 5.2 Dashboard
+
+There are 13 variables left to visualise, I will now create a static
+dashboard to view all of these variables at once.
+
+``` r
+# set data frames
+
+info <- poison %>% dplyr::select(Sick, Sex)
+symptom <- poison %>% dplyr::select(Sick, Nausea, Vomiting, Abdominals, Fever, Diarrhae) 
+food <- poison %>% dplyr::select(c(Sick, 10:15)) 
+
+# graph for info
+
+graph_info <- info %>% 
+  pivot_longer(c(1:2), names_to = "var", values_to = "val") %>% 
+  mutate(var = as.factor(var),
+         val = as.factor(val)) %>% 
+  group_by(var, val) %>% 
+  summarise(count = n()) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = val, y = count)) +
+  geom_bar(stat = "identity", color = "black", fill = "purple") +
+  geom_text(aes(label = count), vjust = 1.5, color = "white") +
+  facet_wrap(~var, scale = "free") +
+  theme_bw() +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5)) +
+  labs(x = "", 
+       y = "Head Count",
+       title = "Status")
+
+
+## graph for symptom
+
+graph_symptom <- symptom %>% 
+  pivot_longer(c(2:6), names_to = "var", values_to = "val") %>% 
+  mutate(var = as.factor(var),
+         val = as.factor(val)) %>% 
+  group_by(Sick, var, val) %>% 
+  summarise(count = n()) %>% 
+  ungroup() %>%   
+  ggplot(aes(x = val, y = count, fill = Sick)) +
+  geom_bar(stat = "identity",
+           position = "dodge",
+           color = "black") +
+  geom_label(aes(label = count), color = "black",
+            position = position_dodge(width = 0.9)) +
+  facet_wrap(~var, scale = "free_x", nrow = 1) +
+  theme_bw() +
+  theme(legend.position = "top",
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.2)) +
+  labs(x = "",
+       y = "",
+       title = "Symptoms")
+
+## graph for food
+
+graph_food <- food %>% 
+  pivot_longer(c(2:7), names_to = "var", values_to = "val") %>% 
+  mutate(var = as.factor(var),
+         val = as.factor(val)) %>% 
+  group_by(Sick, var, val) %>% 
+  summarise(count = n()) %>% 
+  ungroup() %>% 
+  ggplot(aes(y = val, x = count, fill = Sick)) +
+  geom_bar(stat = "identity", color = "black",
+           position = "dodge") +
+  geom_label(aes(label = count), hjust = 0.8,
+             position = position_dodge(width = 0.9)) +
+  facet_wrap(~var, scale = "free_y") +
+  theme_bw() +
+  theme(legend.position = "right",
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5)) +
+  labs(y = "",
+       x = "Head Count",
+       title = "Food Ate")
+
+# Dashboard
+
+title <- ggdraw() + draw_label("Food Poisoning Dataset Analysis", fontface = "bold", size = 20)
+
+top_row <- plot_grid(graph_info, graph_symptom,
+                     rel_widths = c(1, 2.5))
+
+plot_grid(title, top_row, graph_food, 
+          ncol = 1,
+          rel_heights = c(0.2, 1.2, 1))
+```
+
+![](poison_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+**Insights**
+
+-   38 persons out of 55 were sick.
+
+-   Almost all of the responds who suffered from food poisoning
+    experience abdominals, diarrhea, and fever. 20% of them suffered
+    from nausea and 40% suffered from vomiting.
+
+Almost all sicked persons (green) ate all the food mentioned in the
+graph. However, there were many healthy persons also ate these food. It
+can be difficult to estimate which food cause food poisoning.
 
 ## PRINCIPAL COMPONENT METHODS
+
+Applying Principal component methods to find the relationship. I will be
+using multiple
 
 ## REFERENCE
 
