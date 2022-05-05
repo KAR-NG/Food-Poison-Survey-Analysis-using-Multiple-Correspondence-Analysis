@@ -37,7 +37,7 @@ The data of this survey dataset was collected from students in a primary school 
 
 The dataset of this project is called "poison", which is a public dataset from the R package "FactoMineR".
 
-### Data import
+### Data Import
 
 Following code download the dataset from the package.
 
@@ -46,16 +46,56 @@ data(poison)
 
 ```
 
-Random sampling the first 10 rows of the dataset:
+Randomly sample 10 rows within the dataset:
 
 ```{r}
 sample_n(poison, 10)
 
 ```
 
-### Data Description
+### Data Exploration
 
-### Data exploration
+The dataset has 55 rows (55 students) and 15 columns recording the various type of variables (also known as feature).
+
+Following code also shows the variable type allocated by R to each of the column. 
+
+```{r}
+glimpse(poison)
+
+```
+
+Factor "fct" is a variable type we usually allocate to variables that have categorisation nature. There is usually a conversion step required to perform by analyst to convert character "chr" variable such as "Yes" and "No" into factor "fct". This step seems like has been completed.
+
+Insights from following summary, 
+
+* Respondents have age between 4 to 88, with majority of them fall between 6 to 10 years old with a median of 8. Mean of 16.93 shouldn't be used for reference because 88 is a outlier.   
+* Time should be time of recording the data.   
+* The rest of the variables have two categories of either "Yes" or "No".  
+
+```{r}
+summary(poison)
+
+```
+Following is an alternative to see the structure of the dataset. Other than Age and time, the rest of the variables are factor type with 2 levels, of either "Y" or "No", which stand for "Yes" or "No". 
+
+```{r}
+str(poison)
+
+```
+
+Checking missing data in the dataset. 
+
+```{r}
+skim_without_charts(poison)
+
+```
+
+
+## EDA
+
+### Missing 
+
+
 
 ## PRINCIPAL COMPONENT METHODS
 
