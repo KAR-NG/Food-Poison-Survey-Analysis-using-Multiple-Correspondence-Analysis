@@ -12,11 +12,13 @@ Kar
 -   [5 EDA](#5-eda)
     -   [5.1 Age and Time](#51-age-and-time)
     -   [5.2 Dashboard](#52-dashboard)
--   [PRINCIPAL COMPONENT METHODS](#principal-component-methods)
-    -   [MCA](#mca)
-    -   [Scree plot](#scree-plot)
-    -   [Variable Analysis](#variable-analysis)
-    -   [Observation Analysis](#observation-analysis)
+-   [6 PRINCIPAL COMPONENT METHODS](#6-principal-component-methods)
+    -   [6.1 MCA](#61-mca)
+    -   [6.2 MCA’s PCs](#62-mcas-pcs)
+    -   [6.3 Variable Analysis](#63-variable-analysis)
+    -   [6.4 Individual Analysis](#64-individual-analysis)
+    -   [Biplot](#biplot)
+-   [Disclaimer](#disclaimer)
 -   [REFERENCE](#reference)
 
 ## 1 SUMMARY
@@ -30,6 +32,7 @@ library(tidytext)
 library(cowplot)
 library(factoextra)
 library(FactoMineR)
+library(corrplot)
 ```
 
 ## 3 INTRODUCTION
@@ -68,27 +71,27 @@ sample_n(poison, 10)
 ```
 
     ##    Age Time   Sick Sex   Nausea Vomiting Abdominals   Fever   Diarrhae   Potato
-    ## 14   9    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 13  36   19 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 40   6   16 Sick_y   M Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 26   9    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 47  10    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 55   7   14 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 52  11   17 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 12  10   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_n Diarrhea_n Potato_y
-    ## 20  11    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 1    9   22 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
     ## 38   6    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 41   4   12 Sick_y   M Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 49   8    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 42   7    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 29  88    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 47  10    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 13  36   19 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 21  10   18 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 52  11   17 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
     ##      Fish   Mayo Courgette   Cheese   Icecream
-    ## 14 Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
-    ## 13 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 40 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 26 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 47 Fish_y Mayo_n   Courg_y Cheese_y Icecream_n
-    ## 55 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 52 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 12 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 20 Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
+    ## 1  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
     ## 38 Fish_y Mayo_y   Courg_n Cheese_n Icecream_y
+    ## 41 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 49 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 42 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 29 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 47 Fish_y Mayo_n   Courg_y Cheese_y Icecream_n
+    ## 13 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 21 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 52 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
 
 ### 4.2 Data Exploration
 
@@ -419,7 +422,7 @@ Almost all sicked persons (green) ate all the food mentioned in the
 graph. However, there were many healthy persons also ate these food. It
 can be difficult to estimate which food cause food poisoning.
 
-## PRINCIPAL COMPONENT METHODS
+## 6 PRINCIPAL COMPONENT METHODS
 
 There are 5 types of principal component (pc) methods:
 
@@ -440,21 +443,214 @@ supplementary variables, as well as the variables “Sick” and “Sex”.
 Supplementary information can be qualitative variables, quantitative
 variables, or even observation (rows). Supplementary variables will not
 affect the principal components of the analysis. They are used to help
-interpreting the variability in the dataset.
+interpreting the variability in the dataset. Since I am more interested
+in the variable “Sick”, I will only use this supplementary variable in
+the analysis.
 
 Principal component methods (multiple correspondence analysis in this
 case) will extract total variation from a datasets and express them as a
 few new variables, called principal components, without loosing
-important information. The goal is to identify directions along which
-the variation is maximal (KASSAMBARA A 2017).
+important information. The goal is to overlapping the best principal
+components with the coordinate of variables and observations, then
+identify directions on principal components that explained the highest
+variation is maximal (KASSAMBARA A 2017).
 
-### MCA
+### 6.1 MCA
 
-### Scree plot
+Multiple Correspondence Analysis (MCA)’s code is being performed as
+follow:
 
-### Variable Analysis
+-   Quantitative supplementary variable: Age, Time  
+-   Qualitative supplementary variable: Sick, Sex  
+-   Remaining variables will be participating into the multiple
+    correspondence analysis
 
-### Observation Analysis
+``` r
+my.mca <- MCA(poison, 
+              quanti.sup = 1:2, 
+              quali.sup = 3:4, 
+              graph = F)
+```
+
+### 6.2 MCA’s PCs
+
+“Eigenvalue” will tells us the amount of variations retained by each
+principal components (Dim).
+
+Extracting the eigenvalue from the MCA model:
+
+``` r
+get_eigenvalue(my.mca)
+```
+
+    ##        eigenvalue variance.percent cumulative.variance.percent
+    ## Dim.1  0.33523140        33.523140                    33.52314
+    ## Dim.2  0.12913979        12.913979                    46.43712
+    ## Dim.3  0.10734849        10.734849                    57.17197
+    ## Dim.4  0.09587950         9.587950                    66.75992
+    ## Dim.5  0.07883277         7.883277                    74.64319
+    ## Dim.6  0.07108981         7.108981                    81.75217
+    ## Dim.7  0.06016580         6.016580                    87.76876
+    ## Dim.8  0.05577301         5.577301                    93.34606
+    ## Dim.9  0.04120578         4.120578                    97.46663
+    ## Dim.10 0.01304158         1.304158                    98.77079
+    ## Dim.11 0.01229208         1.229208                   100.00000
+
+Alternatively, scree plot will help better visualise the amount of
+variation retained by each principal components.
+
+``` r
+fviz_screeplot(my.mca, addlabels = T, ylim = c(0, 40))
+```
+
+![](poison_files/figure-gfm/unnamed-chunk-13-1.png)<!-- --> The first
+two dimensions (principal components) explained 46.4% of the variation
+and they will be used to find interesting patterns in the data. There is
+no well-accepted method to determine how many PC are enough but in
+practice, we tend to look at the first two dimensions.
+
+Generally, a cut-off point is when first few dimensions account for a
+large proportion of the variability, it is known “elbow” which means a
+significant bend in scree plot, which indicates an optimal
+dimensionality.
+
+### 6.3 Variable Analysis
+
+This section will identify the most relatable important variables in the
+dataset.
+
+``` r
+# Graph
+#1
+var_cor <- fviz_mca_var(my.mca,
+             repel = T,
+             choice = "mca.cor") +
+  theme_classic() +
+  theme(plot.title = element_text(face = "bold", vjust = 4),
+        plot.margin = unit(c(1,1,1,1), "cm")) +
+  labs(title = "Correlation between Variable and PCs")
+#2
+cor_plot <- fviz_mca_var(my.mca,
+             repel = T,
+             invisible = "quali.sup") +
+  labs(title = "Coordinate of Variable Categories") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", vjust = 4),
+        plot.margin = unit(c(1,1,1,1), "cm"))
+#3
+cos_plot <- fviz_mca_var(my.mca,
+             repel = T, 
+             invisible = "quali.sup",
+             col.var = "cos2",
+             gradient.cols = c("yellow", "orange", "red"),
+             alpha = "cos2") +
+  labs(title = "Coordinate + COS2") + 
+  theme(plot.title = element_text(face = "bold", vjust = 4),
+        plot.margin = unit(c(1,1,1,1), "cm"))
+
+#4
+
+contrib_plot <- fviz_mca_var(my.mca,
+             repel = T,
+             col.var = "contrib",
+             alpha = "contrib",
+             gradient.cols = c("yellow", "orange", "red"),
+             invisible = "quali.sup") +
+  labs(title = "Coordinate + Contribution") + 
+  theme(plot.title = element_text(face = "bold", vjust = 4),
+        plot.margin = unit(c(1,1,1,1), "cm"))
+
+
+
+#
+
+title <- ggdraw() + draw_label("Analysis of Variables in <Poison> Dataset", fontface = "bold", size = 20)
+
+up <-  plot_grid(var_cor, cor_plot, 
+                 labels = c("1", "2"))
+
+middle <- plot_grid(cos_plot, contrib_plot,
+                    rel_widths = c(1, 1),
+                    labels = c("3", "4"))
+
+
+plot_grid(title, up, middle,
+          nrow = 3,
+          rel_heights = c(0.2, 1, 1)
+          )
+```
+
+    ## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+    ## Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider increasing max.overlaps
+    ## ggrepel: 3 unlabeled data points (too many overlaps). Consider increasing max.overlaps
+
+![](poison_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+**Insights**
+
+-   In graph 1, by putting all variables (active + supplementary
+    variables) on the first two dimensions of the graph, and the result
+    show that regardless of the supplementary variables that have no
+    influence on the construction of the axes,
+
+    -   **Diarrhea, Fever and Abdominals** are the most correlated
+        variables with **Dim1**  
+    -   **Courgette and Potato** are the most correlated variables with
+        **Dim2**  
+    -   “Sick” among the supplementary variables (blue colored) will be
+        used for analysis in the next section
+
+-   In graph 2, coordinates of each level (categories) of each variable
+    are plotted. Levels with similar profile are grouped together as we
+    can see the “y” and “n” levels are grouped together separately. The
+    distance between each category point with the plot origin indicate
+    the quality of the point on the factor map (graph 2).
+
+-   In graph 3, cosine squared (cos2) will help us to visualise which
+    variables are better represented by the first two dimensions. I can
+    tell that Fever_y, Fever_n, Abdo_y, Abdo_n, diarrhea_y, and
+    diarrhea_n are the top 6 best represented variables on the factor
+    map. The list followed by orange colored variables. This results is
+
+-   In graph 4, contribution (contrib) is a measurement converted from
+    cos2 to tell which variable contribute the most to the components.
+    Variables that contribute the most are the most important variables
+    in explaining the variabilities in the dataset.
+
+### 6.4 Individual Analysis
+
+The term “individual” means the “row” of the dataset, or also known as
+“observation”. “Individual”, or more commonly “observation” are the term
+usually referred to the rows of a structured dataset which has variables
+as columns and records as rows.
+
+### Biplot
+
+``` r
+fviz_mca_biplot(my.mca,
+                
+                # Managing individuals
+                col.ind = poison$Sick,
+                label = "var",
+                legend.title = "Health Status",
+                addEllipses = T,
+                mean.point = F,
+
+                # Managing variables
+                col.var = "black", 
+                # Global
+                repel = T,
+                pointsize = 2.5,
+                ) +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+![](poison_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+## Disclaimer
 
 ## REFERENCE
 
