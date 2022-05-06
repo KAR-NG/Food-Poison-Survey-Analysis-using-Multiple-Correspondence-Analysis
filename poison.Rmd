@@ -247,7 +247,48 @@ Almost all sicked persons (green) ate all the food mentioned in the graph. Howev
 
 ## PRINCIPAL COMPONENT METHODS
 
-Applying Principal component methods to find the relationship. I will be using multiple 
+There are 5 types of principal component (pc) methods:
+
+* Principal Component Analysis (PCA)
+* Correspondence Analysis (CA)  
+* Multiple Correspondence Analysis (MCA)  
+* Factor Analysis of Mixed Data (FAMD)  
+* Multiple Factor Analysis (MFA)  
+
+All of these PC methods are designed for different type of datasets. For example, PCA is chosen when all variables of a particular dataset are numeric. 
+
+In the case of the dataset used in this project, MCA is chosen. It is chosen to analyse multiple categorical variables in the dataset. Numerical variables such as "Age" and "Time" will be treated as supplementary variables, as well as the variables "Sick" and "Sex". Supplementary information can be qualitative variables, quantitative variables, or even observation (rows). Supplementary variables will not affect the principal components of the analysis. They are used to help interpreting the variability in the dataset.    
+
+Principal component methods (multiple correspondence analysis in this case) will extract total variation from a datasets and express them as a few new variables, called principal components, without loosing important information. The goal is to identify directions along which the variation is maximal (KASSAMBARA A 2017). 
+
+### MCA 
+
+```{r}
+
+
+```
+
+
+
+
+### Scree plot
+
+```{r}
+
+```
+
+
+### Variable Analysis
+
+
+### Observation Analysis 
+
+
+
+
+
+
+
 
 
 

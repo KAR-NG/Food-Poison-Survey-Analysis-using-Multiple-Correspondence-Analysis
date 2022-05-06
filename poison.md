@@ -13,6 +13,10 @@ Kar
     -   [5.1 Age and Time](#51-age-and-time)
     -   [5.2 Dashboard](#52-dashboard)
 -   [PRINCIPAL COMPONENT METHODS](#principal-component-methods)
+    -   [MCA](#mca)
+    -   [Scree plot](#scree-plot)
+    -   [Variable Analysis](#variable-analysis)
+    -   [Observation Analysis](#observation-analysis)
 -   [REFERENCE](#reference)
 
 ## 1 SUMMARY
@@ -64,27 +68,27 @@ sample_n(poison, 10)
 ```
 
     ##    Age Time   Sick Sex   Nausea Vomiting Abdominals   Fever   Diarrhae   Potato
-    ## 29  88    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 4    9    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 26   9    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 35   7   15 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_n
-    ## 43  82   20 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 30  79   17 Sick_y   F Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 1    9   22 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 3    6   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 14   9    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
     ## 13  36   19 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 28  85    9 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 40   6   16 Sick_y   M Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 26   9    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 47  10    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 55   7   14 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 52  11   17 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 12  10   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_n Diarrhea_n Potato_y
+    ## 20  11    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 38   6    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
     ##      Fish   Mayo Courgette   Cheese   Icecream
-    ## 29 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 4  Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
-    ## 26 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 35 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 43 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 30 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 1  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 3  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 14 Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
     ## 13 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 28 Fish_y Mayo_n   Courg_n Cheese_y Icecream_y
+    ## 40 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 26 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 47 Fish_y Mayo_n   Courg_y Cheese_y Icecream_n
+    ## 55 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 52 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 12 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 20 Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
+    ## 38 Fish_y Mayo_y   Courg_n Cheese_n Icecream_y
 
 ### 4.2 Data Exploration
 
@@ -417,8 +421,40 @@ can be difficult to estimate which food cause food poisoning.
 
 ## PRINCIPAL COMPONENT METHODS
 
-Applying Principal component methods to find the relationship. I will be
-using multiple
+There are 5 types of principal component (pc) methods:
+
+-   Principal Component Analysis (PCA)
+-   Correspondence Analysis (CA)  
+-   Multiple Correspondence Analysis (MCA)  
+-   Factor Analysis of Mixed Data (FAMD)  
+-   Multiple Factor Analysis (MFA)
+
+All of these PC methods are designed for different type of datasets. For
+example, PCA is chosen when all variables of a particular dataset are
+numeric.
+
+In the case of the dataset used in this project, MCA is chosen. It is
+chosen to analyse multiple categorical variables in the dataset.
+Numerical variables such as “Age” and “Time” will be treated as
+supplementary variables, as well as the variables “Sick” and “Sex”.
+Supplementary information can be qualitative variables, quantitative
+variables, or even observation (rows). Supplementary variables will not
+affect the principal components of the analysis. They are used to help
+interpreting the variability in the dataset.
+
+Principal component methods (multiple correspondence analysis in this
+case) will extract total variation from a datasets and express them as a
+few new variables, called principal components, without loosing
+important information. The goal is to identify directions along which
+the variation is maximal (KASSAMBARA A 2017).
+
+### MCA
+
+### Scree plot
+
+### Variable Analysis
+
+### Observation Analysis
 
 ## REFERENCE
 
