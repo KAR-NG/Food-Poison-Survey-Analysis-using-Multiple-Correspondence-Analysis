@@ -72,27 +72,27 @@ sample_n(poison, 10)
 ```
 
     ##    Age Time   Sick Sex   Nausea Vomiting Abdominals   Fever   Diarrhae   Potato
-    ## 16   6    6 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 50   7   22 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 23   8   21 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 15   8    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 32   6    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 53   6    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 2    5    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 49   8    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
     ## 47  10    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 41   4   12 Sick_y   M Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 45   5   20 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 11   7   17 Sick_y   F Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 1    9   22 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 24  11   13 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_n Diarrhea_y Potato_y
+    ## 51  10    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 4    9    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 6   72    9 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 46   6   16 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 31   9    9 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
     ##      Fish   Mayo Courgette   Cheese   Icecream
-    ## 16 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 50 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 23 Fish_y Mayo_y   Courg_n Cheese_y Icecream_y
-    ## 15 Fish_y Mayo_n   Courg_y Cheese_n Icecream_y
+    ## 32 Fish_y Mayo_n   Courg_y Cheese_n Icecream_y
+    ## 53 Fish_y Mayo_n   Courg_y Cheese_n Icecream_n
+    ## 2  Fish_y Mayo_y   Courg_y Cheese_n Icecream_y
+    ## 49 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
     ## 47 Fish_y Mayo_n   Courg_y Cheese_y Icecream_n
-    ## 41 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 45 Fish_y Mayo_y   Courg_n Cheese_y Icecream_y
-    ## 11 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 1  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 24 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 51 Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
+    ## 4  Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
+    ## 6  Fish_n Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 46 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 31 Fish_y Mayo_n   Courg_y Cheese_y Icecream_y
 
 ### 3.2 Data Exploration
 
