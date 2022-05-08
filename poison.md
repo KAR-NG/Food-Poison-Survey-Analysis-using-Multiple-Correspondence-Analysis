@@ -1,4 +1,4 @@
-poison_survey
+Food Poison Survey Analysis using Multiple Correspondence Analysis
 ================
 Kar
 2022-05-05
@@ -17,7 +17,7 @@ Kar
     -   [5.3 Variable Analysis](#53-variable-analysis)
     -   [5.4 Individual Analysis](#54-individual-analysis)
     -   [5.5 Biplot](#55-biplot)
--   [6 Conclusion](#6-conclusion)
+-   [6 CONCLUSION](#6-conclusion)
 -   [7 REFERENCE](#7-reference)
 
 ## 1 R PACKAGES
@@ -34,12 +34,12 @@ library(corrplot)
 
 ## 2 INTRODUCTION
 
-This project will analyse a survey dataset using one of the principal
-component methods. The technique of “Principal component methods” is
+This project will analyse a survey dataset using one of the Principal
+Component methods. The technique of “Principal Component methods” is
 known as one of the machine learning methods, belonging to the
-“unsupervised” branch, which can quickly summarise a dataset by
-revealing the most important variables (columns) or observations (rows)
-in the dataset.
+“unsupervised” branch. Principal Component methods can quickly summarise
+a multivariate dataset by revealing the most important variables
+(columns) and observations (rows) in the dataset.
 
 The data of this survey dataset was collected from students in a primary
 school who suffered from food poisoning. The dataset contains various
@@ -48,14 +48,18 @@ sex, symptoms of food poisoning (nausea, vomiting, abdominal, fever, and
 diarrhea) and food they ate (potato, fish, mayo, courgette, cheese, ice
 cream).
 
+This project will use multiple component analysis (MCA), which is one of
+the principal component methods to analysis the data and identify which
+food is most likely causing the food poisoning.
+
 ## 3 DATA PREPARATION
 
-The dataset of this project is called “poison”, which is a public
-dataset from the R package “FactoMineR”.
+The dataset of this project is called “poison”. It is a public dataset
+from the R package “FactoMineR”.
 
 ### 3.1 Data Import
 
-Following code download the dataset from the package.
+Following code downloads the dataset from the package.
 
 ``` r
 data(poison)
@@ -68,32 +72,32 @@ sample_n(poison, 10)
 ```
 
     ##    Age Time   Sick Sex   Nausea Vomiting Abdominals   Fever   Diarrhae   Potato
-    ## 25  45   10 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 19  11   14 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 12  10   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_n Diarrhea_n Potato_y
+    ## 38   6    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 53   6    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
     ## 17   7   10 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 13  36   19 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
     ## 7    5   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 22   8   14 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 15   8    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 3    6   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 35   7   15 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_n
-    ## 23   8   21 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 5    7   14 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 40   6   16 Sick_y   M Nausea_y  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 54  10   19 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_n Potato_y
+    ## 16   6    6 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 24  11   13 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_n Diarrhea_y Potato_y
     ##      Fish   Mayo Courgette   Cheese   Icecream
-    ## 25 Fish_y Mayo_y   Courg_y Cheese_n Icecream_y
-    ## 19 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 12 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 38 Fish_y Mayo_y   Courg_n Cheese_n Icecream_y
+    ## 53 Fish_y Mayo_n   Courg_y Cheese_n Icecream_n
     ## 17 Fish_y Mayo_y   Courg_y Cheese_n Icecream_y
+    ## 13 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
     ## 7  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 22 Fish_y Mayo_y   Courg_y Cheese_y Icecream_n
-    ## 15 Fish_y Mayo_n   Courg_y Cheese_n Icecream_y
-    ## 3  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 35 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 23 Fish_y Mayo_y   Courg_n Cheese_y Icecream_y
-    ## 5  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 40 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 54 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 16 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 24 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
 
 ### 3.2 Data Exploration
 
-The dataset has 55 rows (55 students) and 15 columns recording the
-various type of variables (also known as feature).
+The dataset has 55 rows (55 students) and 15 columns that recording the
+various type of variables (also known as features).
 
 Following code also shows the variable type allocated by R to each of
 the column.
@@ -122,15 +126,18 @@ glimpse(poison)
 
 Factor “fct” is a variable type we usually allocate to variables that
 have categorisation nature. There is usually a conversion step required
-to perform by analyst to convert character “chr” variable such as “Yes”
-and “No” into factor “fct”. This step seems like has been completed.
+to perform by analyst to convert character “chr” variable (such as “Yes”
+and “No” in this case) into factor “fct”. This step seems like has been
+completed.
 
 Insights from following summary,
 
--   Respondents have age between 4 to 88, with majority of them fall
-    between 6 to 10 years old with a median of 8. Mean of 16.93
+-   Respondents were between 4 to 88 years old, with majority of them
+    fall between 6 to 10 years old with a median of 8. Mean of 16.93
     shouldn’t be used for reference because 88 is a outlier.  
--   Time should be time of recording the data.  
+
+-   Time should be the times when these data were recorded.
+
 -   The rest of the variables have two categories of either “Yes” or
     “No”.
 
@@ -161,8 +168,8 @@ summary(poison)
     ## 
 
 Following is an alternative to see the structure of the dataset. Other
-than Age and time, the rest of the variables are factor type with 2
-levels, of either “Y” or “No”, which stand for “Yes” or “No”.
+than “Age” and “Time”, the rest of the variables are factor type with 2
+levels, of either “Y” or “N”, which stand for “Yes” or “No”.
 
 ``` r
 str(poison)
@@ -185,7 +192,7 @@ str(poison)
     ##  $ Cheese    : Factor w/ 2 levels "Cheese_n","Cheese_y": 2 1 2 2 2 2 2 2 2 2 ...
     ##  $ Icecream  : Factor w/ 2 levels "Icecream_n","Icecream_y": 2 2 2 2 2 2 2 2 2 2 ...
 
-Checking missing data in the dataset, there is no missing data deteccted
+Checking missing data in the dataset, there is no missing data detected
 by examining the column “n_missing” and “complete_rate” in following
 tables. This special summary also summarise that there are 13 factor
 variables and 2 numerical variables.
@@ -252,7 +259,7 @@ There is no missing data in the dataset.
 ## 4 EDA
 
 EDA stands for Exploratory data analysis, which is using graphical
-methods to explore the data, to find and understand trends.
+methods to explore the data, to find and understand the general trends.
 
 ### 4.1 Age and Time
 
@@ -297,7 +304,7 @@ ggplot(df5.2, aes(x = val, y = count, fill = var)) +
   theme(legend.position = "none",
         plot.title = element_text(hjust = 0.5, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5)) +
-  labs(title = "The distribution of Age and Time",
+  labs(title = "The Distribution of Age and Time",
        subtitle = "by Histogram",
        x = "Value",
        y = "Head Count")
@@ -305,15 +312,16 @@ ggplot(df5.2, aes(x = val, y = count, fill = var)) +
 
 ![](poison_files/figure-gfm/unnamed-chunk-9-1.png)<!-- --> From above
 graph, I can figure that students participated in the survey were
-between 5 to 11 years old. The 4 years old child might be a visitor
-brought by one of the adults between 36 to 88 years old. These adults
-might be visitors or teachers. The identity of these adults are not
-important, as well as the variable “Time” because I am more focus on
-what food cause the food poisoning.
+between 5 to 11 years old.
+
+The 4 years old child might be a visitor brought by one of the adults
+between 36 to 88 years old. These adults might be visitors or teachers.
+The identity of these adults are not important, as well as the variable
+“Time” because I am more focus on what food caused the food poisoning.
 
 ### 4.2 Dashboard
 
-There are 13 variables left to visualise, I will now create a static
+There are 13 variables left to visualise. Now, I create a static
 dashboard to view all of these variables at once.
 
 ``` r
@@ -417,7 +425,7 @@ plot_grid(title, top_row, graph_food,
 
 Almost all sicked persons (green) ate all the food mentioned in the
 graph. However, there were many healthy persons also ate these food. It
-can be difficult to estimate which food cause food poisoning.
+can be difficult to estimate which food caused the food poisoning.
 
 ## 5 PRINCIPAL COMPONENT METHODS
 
@@ -433,8 +441,9 @@ All of these PC methods are designed for different type of datasets. For
 example, PCA is chosen when all variables of a particular dataset are
 numeric.
 
-In the case of the dataset used in this project, MCA is chosen. It is
-chosen to analyse multiple categorical variables in the dataset.
+In the case of the dataset used in this project, **MCA** is chosen. It
+is chosen to analyse multiple categorical variables in the dataset.
+
 Numerical variables such as “Age” and “Time” will be treated as
 supplementary variables, as well as the variables “Sick” and “Sex”.
 Supplementary information can be qualitative variables, quantitative
@@ -442,15 +451,15 @@ variables, or even observation (rows). Supplementary variables will not
 affect the principal components of the analysis. They are used to help
 interpreting the variability in the dataset. Since I am more interested
 in the variable “Sick”, I will only use this supplementary variable in
-the analysis.
+this analysis, to estimate which food cause the food poisoning.
 
-Principal component methods (multiple correspondence analysis in this
+Principal Component methods (multiple correspondence analysis in this
 case) will extract total variation from a datasets and express them as a
 few new variables, called principal components, without loosing
 important information. The goal is to overlapping the best principal
 components with the coordinate of variables and observations, then
 identify directions on principal components that explained the highest
-variation is maximal (KASSAMBARA A 2017).
+variation (KASSAMBARA A 2017).
 
 ### 5.1 MCA
 
@@ -597,29 +606,34 @@ plot_grid(title, up, middle,
     are plotted. Levels with similar profile are grouped together as we
     can see the “y” and “n” levels are grouped together separately. The
     distance between each category point with the plot origin indicate
-    the quality of the point on the factor map (graph 2).
+    the quality of the point on the factor map (graph 2). The further
+    the point is away from the origin, the better the point is to be
+    presented by the first two components.
 
 -   In graph 3, cosine squared (cos2) will help us to visualise which
     variables are better represented by the first two dimensions. The
-    larger the size, the better it is to be represented by the factor
-    map. However, even if a variable is well represented but it might
-    not be contributing much to the principal components. Variables that
-    contribute the most are the most important variables in explaining
-    the variability in the dataset.
+    larger the size of a particular point, the better it is to be
+    represented by the factor map. However, even if a variable is well
+    represented but it might not be contributing much to the principal
+    components. Variables that contribute the most are the most
+    important variables in explaining the variability in the dataset.
 
 ### 5.4 Individual Analysis
 
 The term “individual” means the “row” of the dataset, or also known as
-“observation”. “Individual”, or more commonly “observation” are the term
-usually referred to the rows of a structured dataset which has variables
-as columns and records as rows.
+“observation”. “Individual”, or more commonly “observation” are the
+terms usually referred to the rows of a structured dataset which has
+variables as columns and records as rows.
 
 This section will perform the similar visualisation as the variable
 analysis in the previous section. Similarly, this section will identify
 the most representative and contributive observations. These are
 important observations in explaining the variability in the dataset.
-Moreover, the supplementary variable “Sick” will now be used to help
-understand the data.
+Therefore, in other words, we are not really that required to look at
+all the points, but the important ones that are presented well in the
+dimensions we used in the factor map (the graph). Moreover, the
+supplementary variable “Sick” will now be used to help understand the
+data.
 
 ``` r
 # Graphs
@@ -676,42 +690,50 @@ plot_grid(title,
 
 ![](poison_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-Figure 1 of the above visualisation plots of coordinate of each
-observation (row) onto the factor map constructed by dimension 1 and 2.
-The lines are just lines connecting between each identity (row’s name)
-that placed too far away from its point.
+**Insights**
 
-Figure 2 starts incorporating the important information we have in the
-dataset, which is the variable “sick”, which indicates whether a row is
-sick or no sick. We can clearly see that two clusters have been formed.
-It is the typical nature of PC methods, similar observations (rows) will
-be grouped together, and negative correlated observations will be
-positioned on opposite side of the plot origin, just like sick_y versus
-sick_n. Important to note that the distance between each point and the
-origin measure the quality of the observation points to be represented
-by both dimensions on the factor map.
+-   Figure 1 of the above visualisation plots of coordinate of each
+    observation (row) onto the factor map constructed by dimension 1
+    and 2. The lines are just lines connecting between each identity
+    (row’s name) that placed too far away from its point.
 
-Figure 3 adds the cluster ellipse to group the observations point, which
-is just a visual add. However, cos2 and contribution statistics are
-added. It has been discussed that points that further away from origin
-points are better represented by dimensions, the statistics that
-measures this magnitude is called cosine squared (cos2). In the graph,
-the larger the size of a point meaning the point is better represented
-and therefore we should emphasis these points when discussing the
-results. The further the points from the origin, the larger the size of
-the point. Finally contribution statistics is being added using “alpha”
-which is a function to use transparency of the point the emphases
-important points to be discusses. Points that close to the origin are
-towards transparent compared to points that located further away from
-the origin.
+-   Figure 2 starts incorporating the important information we have in
+    the dataset, which is the variable “sick”, which indicates whether a
+    row belong to sick respondents or not. We can clearly see that two
+    clusters have been formed, it is the typical nature of PC methods
+    that similar observations (rows) will be grouped together, and
+    negatively correlated observations will be positioned on opposite
+    side of the plot origin, just like sick_y versus sick_n. Important
+    to note that the distance between each point and the origin measure
+    the quality of the observation points to be represented by both
+    dimensions on the factor map.
+
+-   Figure 3 adds the cluster ellipse to group the observations point,
+    which is just a visual aid. However, cos2 and contribution
+    statistics are added. It has been discussed that points that further
+    away from origin points are better represented by dimensions, the
+    statistics that measures this magnitude is called cosine squared
+    (cos2). In the graph, the larger the size of a point meaning the
+    point is better represented and therefore we should emphasis these
+    points when discussing the results. The further the points from the
+    origin, the larger the size of the point, the higher the cos2
+    statistics, and the better the point is to be represented on the
+    factor map. Finally “contribution” statistics is being added using
+    “alpha” which is a function to use transparency to emphasis
+    important points to be discussed. Points that close to the origin
+    are more transparent compared to points that located further away
+    from the origin.
+
+Next, I will use biplot to combine both variable and individual graphs
+to further the discussion.
 
 ### 5.5 Biplot
 
 Biplot is used to combine both graphs of individual and variable
-analysis, to overlay them together to find trend. It is generally
-recommended to use biplot only when low number of variables and points,
-otherwise the biplot might be too crowded and the true trends might be
-hard to tell.
+analysis, to overlay them together to find internal trend. It is
+generally recommended to use biplot only when low number of variables
+and individual points (observations), otherwise the biplot might be too
+crowded and the true trends might be hard to tell.
 
 ``` r
 # 1 Variable plot
@@ -756,19 +778,27 @@ plot_grid(top, fig3.3,
 
 The biplot is graphed by combining both variable and individual plots.
 
-I have remove most of the characterization done in the variable and
-individual plots otherwise the biplot might be too completed to
-understand and may cause confusion. One should understands the variable
-plot first, followed by individual plots (observations / rows plots),
-then lastly the biplot. Well, there is no absolute rule that one should
-follow this sequence but it maybe a good order.
+I have removed most of the characterization in the biplot done in the
+variable and individual plots otherwise the biplot might be too
+complicated to understand and may cause confusion. One should
+understands the variable plot first, followed by individual plots
+(observations / rows plots), then lastly the biplot. Well, there is no
+absolute rule that one should follow this sequence but it maybe a good
+order.
 
-## 6 Conclusion
+From the biplot, I can see that the yellow ellipse formed by well
+represented individuals represents “Sick” respondents, majority of them
+are likely to experience vomit, fever, diarrhea and abdominals, and the
+food that most likely causing the food poisoning might be mayonnaise
+because it is better represented by the factor map (higher cos2) and
+have a considerable level of contribution statistics (higher contrib).
 
-In conclusion, for sick persons (yellow points), the most likely
-symptoms are vomit, fever, and diarrhea. The most possible food caused
-the food poisoning is very likely Mayo, supported by contribution
-statistics and cosine squared (cos2).
+## 6 CONCLUSION
+
+In conclusion, for sick respondents (yellow points), the most likely
+symptoms are vomit, fever, diarrhea, and abdominals. The most possible
+food caused the food poisoning is very likely mayonnaise, supported by
+contribution statistics and cosine squared (cos2).
 
 ## 7 REFERENCE
 
