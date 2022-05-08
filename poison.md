@@ -3,27 +3,24 @@ poison_survey
 Kar
 2022-05-05
 
--   [1 SUMMARY](#1-summary)
--   [2 R PACKAGES](#2-r-packages)
--   [3 INTRODUCTION](#3-introduction)
--   [4 DATA PREPARATION](#4-data-preparation)
-    -   [4.1 Data Import](#41-data-import)
-    -   [4.2 Data Exploration](#42-data-exploration)
--   [5 EDA](#5-eda)
-    -   [5.1 Age and Time](#51-age-and-time)
-    -   [5.2 Dashboard](#52-dashboard)
--   [6 PRINCIPAL COMPONENT METHODS](#6-principal-component-methods)
-    -   [6.1 MCA](#61-mca)
-    -   [6.2 MCA’s PCs](#62-mcas-pcs)
-    -   [6.3 Variable Analysis](#63-variable-analysis)
-    -   [6.4 Individual Analysis](#64-individual-analysis)
-    -   [Biplot](#biplot)
--   [Disclaimer](#disclaimer)
--   [REFERENCE](#reference)
+-   [1 R PACKAGES](#1-r-packages)
+-   [2 INTRODUCTION](#2-introduction)
+-   [3 DATA PREPARATION](#3-data-preparation)
+    -   [3.1 Data Import](#31-data-import)
+    -   [3.2 Data Exploration](#32-data-exploration)
+-   [4 EDA](#4-eda)
+    -   [4.1 Age and Time](#41-age-and-time)
+    -   [4.2 Dashboard](#42-dashboard)
+-   [5 PRINCIPAL COMPONENT METHODS](#5-principal-component-methods)
+    -   [5.1 MCA](#51-mca)
+    -   [5.2 MCA’s PCs](#52-mcas-pcs)
+    -   [5.3 Variable Analysis](#53-variable-analysis)
+    -   [5.4 Individual Analysis](#54-individual-analysis)
+    -   [5.5 Biplot](#55-biplot)
+-   [6 Conclusion](#6-conclusion)
+-   [7 REFERENCE](#7-reference)
 
-## 1 SUMMARY
-
-## 2 R PACKAGES
+## 1 R PACKAGES
 
 ``` r
 library(tidyverse)
@@ -35,7 +32,7 @@ library(FactoMineR)
 library(corrplot)
 ```
 
-## 3 INTRODUCTION
+## 2 INTRODUCTION
 
 This project will analyse a survey dataset using one of the principal
 component methods. The technique of “Principal component methods” is
@@ -51,12 +48,12 @@ sex, symptoms of food poisoning (nausea, vomiting, abdominal, fever, and
 diarrhea) and food they ate (potato, fish, mayo, courgette, cheese, ice
 cream).
 
-## 4 DATA PREPARATION
+## 3 DATA PREPARATION
 
 The dataset of this project is called “poison”, which is a public
 dataset from the R package “FactoMineR”.
 
-### 4.1 Data Import
+### 3.1 Data Import
 
 Following code download the dataset from the package.
 
@@ -71,29 +68,29 @@ sample_n(poison, 10)
 ```
 
     ##    Age Time   Sick Sex   Nausea Vomiting Abdominals   Fever   Diarrhae   Potato
-    ## 1    9   22 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 38   6    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 41   4   12 Sick_y   M Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 49   8    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 42   7    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 29  88    0 Sick_n   F Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 47  10    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
-    ## 13  36   19 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 21  10   18 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
-    ## 52  11   17 Sick_y   M Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 25  45   10 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 19  11   14 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 17   7   10 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 7    5   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 22   8   14 Sick_y   F Nausea_n  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 15   8    0 Sick_n   M Nausea_n  Vomit_n     Abdo_n Fever_n Diarrhea_n Potato_y
+    ## 3    6   16 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 35   7   15 Sick_y   F Nausea_y  Vomit_n     Abdo_y Fever_y Diarrhea_y Potato_n
+    ## 23   8   21 Sick_y   F Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
+    ## 5    7   14 Sick_y   M Nausea_n  Vomit_y     Abdo_y Fever_y Diarrhea_y Potato_y
     ##      Fish   Mayo Courgette   Cheese   Icecream
-    ## 1  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 38 Fish_y Mayo_y   Courg_n Cheese_n Icecream_y
-    ## 41 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 49 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 42 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 29 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 47 Fish_y Mayo_n   Courg_y Cheese_y Icecream_n
-    ## 13 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 21 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
-    ## 52 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 25 Fish_y Mayo_y   Courg_y Cheese_n Icecream_y
+    ## 19 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 17 Fish_y Mayo_y   Courg_y Cheese_n Icecream_y
+    ## 7  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 22 Fish_y Mayo_y   Courg_y Cheese_y Icecream_n
+    ## 15 Fish_y Mayo_n   Courg_y Cheese_n Icecream_y
+    ## 3  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 35 Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
+    ## 23 Fish_y Mayo_y   Courg_n Cheese_y Icecream_y
+    ## 5  Fish_y Mayo_y   Courg_y Cheese_y Icecream_y
 
-### 4.2 Data Exploration
+### 3.2 Data Exploration
 
 The dataset has 55 rows (55 students) and 15 columns recording the
 various type of variables (also known as feature).
@@ -252,12 +249,12 @@ colSums(is.na(poison))
 
 There is no missing data in the dataset.
 
-## 5 EDA
+## 4 EDA
 
 EDA stands for Exploratory data analysis, which is using graphical
 methods to explore the data, to find and understand trends.
 
-### 5.1 Age and Time
+### 4.1 Age and Time
 
 ``` r
 # df
@@ -314,7 +311,7 @@ might be visitors or teachers. The identity of these adults are not
 important, as well as the variable “Time” because I am more focus on
 what food cause the food poisoning.
 
-### 5.2 Dashboard
+### 4.2 Dashboard
 
 There are 13 variables left to visualise, I will now create a static
 dashboard to view all of these variables at once.
@@ -422,7 +419,7 @@ Almost all sicked persons (green) ate all the food mentioned in the
 graph. However, there were many healthy persons also ate these food. It
 can be difficult to estimate which food cause food poisoning.
 
-## 6 PRINCIPAL COMPONENT METHODS
+## 5 PRINCIPAL COMPONENT METHODS
 
 There are 5 types of principal component (pc) methods:
 
@@ -455,7 +452,7 @@ components with the coordinate of variables and observations, then
 identify directions on principal components that explained the highest
 variation is maximal (KASSAMBARA A 2017).
 
-### 6.1 MCA
+### 5.1 MCA
 
 Multiple Correspondence Analysis (MCA)’s code is being performed as
 follow:
@@ -472,7 +469,7 @@ my.mca <- MCA(poison,
               graph = F)
 ```
 
-### 6.2 MCA’s PCs
+### 5.2 MCA’s PCs
 
 “Eigenvalue” will tells us the amount of variations retained by each
 principal components (Dim).
@@ -514,15 +511,15 @@ large proportion of the variability, it is known “elbow” which means a
 significant bend in scree plot, which indicates an optimal
 dimensionality.
 
-### 6.3 Variable Analysis
+### 5.3 Variable Analysis
 
 This section will identify the most relatable important variables in the
 dataset.
 
 ``` r
-# Graph
+# Graphs
 #1
-var_cor <- fviz_mca_var(my.mca,
+fig1.1 <- fviz_mca_var(my.mca,
              repel = T,
              choice = "mca.cor") +
   theme_classic() +
@@ -530,7 +527,7 @@ var_cor <- fviz_mca_var(my.mca,
         plot.margin = unit(c(1,1,1,1), "cm")) +
   labs(title = "Correlation between Variable and PCs")
 #2
-cor_plot <- fviz_mca_var(my.mca,
+fig1.2 <- fviz_mca_var(my.mca,
              repel = T,
              invisible = "quali.sup") +
   labs(title = "Coordinate of Variable Categories") +
@@ -538,7 +535,7 @@ cor_plot <- fviz_mca_var(my.mca,
   theme(plot.title = element_text(face = "bold", vjust = 4),
         plot.margin = unit(c(1,1,1,1), "cm"))
 #3
-cos_plot <- fviz_mca_var(my.mca,
+fig1.3 <- fviz_mca_var(my.mca,
              repel = T, 
              invisible = "quali.sup",
              col.var = "cos2",
@@ -550,41 +547,35 @@ cos_plot <- fviz_mca_var(my.mca,
 
 #4
 
-contrib_plot <- fviz_mca_var(my.mca,
-             repel = T,
+fig1.3 <-  fviz_mca_var(my.mca,
+             repel = T, 
+             invisible = "quali.sup",
+             gradient.cols = c("green1", "green2", "green4"),
+             # Characterising the points
              col.var = "contrib",
-             alpha = "contrib",
-             gradient.cols = c("yellow", "orange", "red"),
-             invisible = "quali.sup") +
-  labs(title = "Coordinate + Contribution") + 
+             alpha = "cos2",
+             pointsize = "cos2") +
+  labs(title = "Coordinate + COS2 + Contribution") + 
   theme(plot.title = element_text(face = "bold", vjust = 4),
         plot.margin = unit(c(1,1,1,1), "cm"))
 
 
 
-#
+# Dashboard
 
 title <- ggdraw() + draw_label("Analysis of Variables in <Poison> Dataset", fontface = "bold", size = 20)
 
-up <-  plot_grid(var_cor, cor_plot, 
+up <-  plot_grid(fig1.1, fig1.2, 
                  labels = c("1", "2"))
 
-middle <- plot_grid(cos_plot, contrib_plot,
-                    rel_widths = c(1, 1),
-                    labels = c("3", "4"))
-
+middle <-  plot_grid(fig1.3,
+                 labels = "3")
 
 plot_grid(title, up, middle,
           nrow = 3,
           rel_heights = c(0.2, 1, 1)
           )
 ```
-
-    ## Warning: ggrepel: 2 unlabeled data points (too many overlaps). Consider
-    ## increasing max.overlaps
-
-    ## Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider increasing max.overlaps
-    ## ggrepel: 3 unlabeled data points (too many overlaps). Consider increasing max.overlaps
 
 ![](poison_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
@@ -609,50 +600,177 @@ plot_grid(title, up, middle,
     the quality of the point on the factor map (graph 2).
 
 -   In graph 3, cosine squared (cos2) will help us to visualise which
-    variables are better represented by the first two dimensions. I can
-    tell that Fever_y, Fever_n, Abdo_y, Abdo_n, diarrhea_y, and
-    diarrhea_n are the top 6 best represented variables on the factor
-    map. The list followed by orange colored variables. This results is
+    variables are better represented by the first two dimensions. The
+    larger the size, the better it is to be represented by the factor
+    map. However, even if a variable is well represented but it might
+    not be contributing much to the principal components. Variables that
+    contribute the most are the most important variables in explaining
+    the variability in the dataset.
 
--   In graph 4, contribution (contrib) is a measurement converted from
-    cos2 to tell which variable contribute the most to the components.
-    Variables that contribute the most are the most important variables
-    in explaining the variabilities in the dataset.
-
-### 6.4 Individual Analysis
+### 5.4 Individual Analysis
 
 The term “individual” means the “row” of the dataset, or also known as
 “observation”. “Individual”, or more commonly “observation” are the term
 usually referred to the rows of a structured dataset which has variables
 as columns and records as rows.
 
-### Biplot
+This section will perform the similar visualisation as the variable
+analysis in the previous section. Similarly, this section will identify
+the most representative and contributive observations. These are
+important observations in explaining the variability in the dataset.
+Moreover, the supplementary variable “Sick” will now be used to help
+understand the data.
 
 ``` r
-fviz_mca_biplot(my.mca,
-                
-                # Managing individuals
-                col.ind = poison$Sick,
-                label = "var",
-                legend.title = "Health Status",
-                addEllipses = T,
-                mean.point = F,
+# Graphs
+# 1
+fig2.1 <- fviz_mca_ind(my.mca,
+             repel = T) +
+  labs(title = "Coordinate of row ") + 
+  theme(plot.title = element_text(face = "bold", vjust = 4),
+        plot.margin = unit(c(1,1,1,1), "cm"))
 
-                # Managing variables
-                col.var = "black", 
-                # Global
-                repel = T,
-                pointsize = 2.5,
-                ) +
-  theme_classic() +
-  theme(legend.position = "top")
+# 1
+fig2.2 <- fviz_mca_ind(my.mca,
+             repel = T,
+             habillage = "Sick",
+             palette = "jco",
+             mean.point = F) +
+  labs(title = "Coordinate + Sickness Variable ") + 
+  theme(plot.title = element_text(face = "bold", vjust = 4),
+        plot.margin = unit(c(1,1,1,1), "cm"))
+# 3
+
+fig2.3 <- fviz_mca_ind(my.mca,
+             repel = T,
+             habillage = "Sick",   # grouping the observations by "Sick"
+             palette = "jco",
+             mean.point = F,
+             #
+             pointsize = "cos2",
+             alpha = "contrib",
+             addEllipses = T
+             #
+             ) +
+  labs(title = "Coordinate + Sickness Variable + Cos2 + Contribution ") + 
+  theme(plot.title = element_text(face = "bold", vjust = 4),
+        plot.margin = unit(c(1,1,1,1), "cm"))
+
+# Dashboard
+
+title <- ggdraw() + draw_label("Analysis of Rows in <Poison> Dataset", fontface = "bold", size = 20)
+
+top <- plot_grid(fig2.1, fig2.2, 
+          labels = c("1", "2"))
+
+middle <- plot_grid(fig2.3, 
+                    labels = "3")
+
+
+plot_grid(title, 
+          top,
+          middle,
+          nrow = 3,
+          rel_heights = c(0.2, 1, 1))
 ```
 
 ![](poison_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-## Disclaimer
+Figure 1 of the above visualisation plots of coordinate of each
+observation (row) onto the factor map constructed by dimension 1 and 2.
+The lines are just lines connecting between each identity (row’s name)
+that placed too far away from its point.
 
-## REFERENCE
+Figure 2 starts incorporating the important information we have in the
+dataset, which is the variable “sick”, which indicates whether a row is
+sick or no sick. We can clearly see that two clusters have been formed.
+It is the typical nature of PC methods, similar observations (rows) will
+be grouped together, and negative correlated observations will be
+positioned on opposite side of the plot origin, just like sick_y versus
+sick_n. Important to note that the distance between each point and the
+origin measure the quality of the observation points to be represented
+by both dimensions on the factor map.
+
+Figure 3 adds the cluster ellipse to group the observations point, which
+is just a visual add. However, cos2 and contribution statistics are
+added. It has been discussed that points that further away from origin
+points are better represented by dimensions, the statistics that
+measures this magnitude is called cosine squared (cos2). In the graph,
+the larger the size of a point meaning the point is better represented
+and therefore we should emphasis these points when discussing the
+results. The further the points from the origin, the larger the size of
+the point. Finally contribution statistics is being added using “alpha”
+which is a function to use transparency of the point the emphases
+important points to be discusses. Points that close to the origin are
+towards transparent compared to points that located further away from
+the origin.
+
+### 5.5 Biplot
+
+Biplot is used to combine both graphs of individual and variable
+analysis, to overlay them together to find trend. It is generally
+recommended to use biplot only when low number of variables and points,
+otherwise the biplot might be too crowded and the true trends might be
+hard to tell.
+
+``` r
+# 1 Variable plot
+fig3.1 <- fig1.3 +labs(title = "Variable plot")
+
+# 2 Individual plot
+fig3.2 <- fig2.3 +labs(title = "Individual plot")
+
+# 3 Biplot
+fig3.3 <- fviz_mca_biplot(my.mca,
+                
+                # Global
+                repel = T,
+                
+                # Managing individuals
+                habillage = "Sick",
+                palette = "jco",
+                addEllipses = T,
+                mean.point = F,
+                geom.ind = "point",
+                shape.ind = 21,
+                size.ind = 4,
+
+                # Managing variables
+                col.var = "black"
+
+                ) +
+  theme_classic() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold")) +
+  labs(title = "Biplot (Variable plot + Individual plot)")
+
+# Dashboard
+
+top <- plot_grid(fig3.1, fig3.2)
+
+plot_grid(top, fig3.3,
+          ncol = 1)
+```
+
+![](poison_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+The biplot is graphed by combining both variable and individual plots.
+
+I have remove most of the characterization done in the variable and
+individual plots otherwise the biplot might be too completed to
+understand and may cause confusion. One should understands the variable
+plot first, followed by individual plots (observations / rows plots),
+then lastly the biplot. Well, there is no absolute rule that one should
+follow this sequence but it maybe a good order.
+
+## 6 Conclusion
+
+In conclusion, for sick persons (yellow points), the most likely
+symptoms are vomit, fever, and diarrhea. The most possible food caused
+the food poisoning is very likely Mayo, supported by contribution
+statistics and cosine squared (cos2).
+
+## 7 REFERENCE
 
 KASSAMBARA A 2017, *Practical Guide To Principal Component Methods in
 R*, Edition 1, sthda.com
